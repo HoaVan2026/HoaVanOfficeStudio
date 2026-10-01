@@ -28,13 +28,13 @@ public partial class MainWindow : Window
         var result = await _officeCli.VersionAsync();
         if (result.Success)
         {
-            EngineStatusText.Text = $"Sẵn sàng · {result.StandardOutput.Trim()}";
+            EngineStatusText.Text = $"OfficeCLI Engine: READY · {result.StandardOutput.Trim()}";
             EngineStatusText.Foreground = System.Windows.Media.Brushes.LightGreen;
             AppendResult("OfficeCLI version", result);
         }
         else
         {
-            EngineStatusText.Text = "Chưa tìm thấy OfficeCLI. Hãy đặt officecli-win-x64.exe vào thư mục tools của app hoặc đặt biến OFFICECLI_PATH.";
+            EngineStatusText.Text = "OfficeCLI Engine: NOT FOUND. Bản Portable hợp lệ phải có tools\officecli-win-x64.exe.";
             EngineStatusText.Foreground = System.Windows.Media.Brushes.LightSalmon;
             AppendResult("Kiểm tra engine", result);
         }
