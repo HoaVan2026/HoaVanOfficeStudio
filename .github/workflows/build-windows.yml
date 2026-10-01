@@ -34,31 +34,30 @@ jobs:
           -p:DebugType=None
           -p:DebugSymbols=false
           -o dist/HoaVanOfficeStudio
-
       - name: Download latest OfficeCLI
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path "dist/HoaVanOfficeStudio/tools"
 
-          $release = Invoke-RestMethod `
-            -Uri "https://api.github.com/repos/iOfficeAI/OfficeCLI/releases/latest"
-            -Headers @{ "User-Agent" = "HoaVanOfficeStudio-Build" }
+          $release = Invoke-RestMethod -Uri "https://api.github.com/repos/iOfficeAI/OfficeCLI/releases/latest" -Headers @{ "User-Agent" = "HoaVanOfficeStudio-Build" }
 
-          $asset = $release.assets | Where-Object {
-            $_.name -eq "officecli-win-x64.exe"
-          } | Select-Object -First 1
+          $asset = $release.assets | Where-Object { $_.name -eq "officecli-win-x64.exe" } | Select-Object -First 1
 
           if (-not $asset) {
             Write-Host "Available OfficeCLI assets:"
-            $release.assets | ForEach-Object {
-              Write-Host $_.name
-            }
+            $release.assets | ForEach-Object { Write-Host $_.name }
             throw "Cannot find officecli-win-x64.exe in latest OfficeCLI release."
           }
 
-          Invoke-WebRequest `
-            -Uri $asset.browser_download_url `
-            -OutFile "dist/HoaVanOfficeStudio/tools/officecli-win-x64.exe"
+          Write-Host "Downloading: $($asset.browser_download_url)"
+
+          Invoke-WebRequest -Uri $asset.browser_download_url -OutFile "dist/HoaVanOfficeStudio/tools/officecli-win-x64.exe"
+
+          if (-not (Test-Path "dist/HoaVanOfficeStudio/tools/officecli-win-x64.exe")) {
+            throw "OfficeCLI download failed."
+          }
+
+          Write-Host "OfficeCLI downloaded successfully."
 
       - name: Copy OfficeCLI notices
         shell: pwsh
