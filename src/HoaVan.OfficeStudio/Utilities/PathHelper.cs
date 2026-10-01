@@ -1,3 +1,4 @@
+using System.IO;
 namespace HoaVan.OfficeStudio.Utilities;
 
 public static class PathHelper
