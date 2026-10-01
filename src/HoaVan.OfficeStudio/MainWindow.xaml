@@ -1,7 +1,7 @@
 <Window x:Class="HoaVan.OfficeStudio.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Hoa Van Office Studio V1.0.2" Height="820" Width="1260"
+        Title="Hoa Van Office Studio V1.0.3" Height="820" Width="1260"
         MinHeight="680" MinWidth="1020" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -19,7 +19,7 @@
                 <StackPanel>
                     <TextBlock Text="HOA VAN" Foreground="#93C5FD" FontSize="14" FontWeight="Bold"/>
                     <TextBlock Text="Office Studio" Foreground="White" FontSize="27" FontWeight="Bold" Margin="0,3,0,2"/>
-                    <TextBlock Text="V1.0.2 · Windows Portable" Foreground="#94A3B8" FontSize="12"/>
+                    <TextBlock Text="V1.0.3 · Windows Portable" Foreground="#94A3B8" FontSize="12"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="1" Margin="0,38,0,0">
@@ -29,7 +29,7 @@
                             <TextBlock x:Name="EngineStatusText" Text="Đang kiểm tra..." Foreground="#CBD5E1" TextWrapping="Wrap" FontSize="12" Margin="0,5,0,0"/>
                         </StackPanel>
                     </Border>
-                    <TextBlock Text="V1.0.2 hỗ trợ" Foreground="#64748B" FontWeight="SemiBold" Margin="4,12,0,8"/>
+                    <TextBlock Text="V1.0.3 hỗ trợ" Foreground="#64748B" FontWeight="SemiBold" Margin="4,12,0,8"/>
                     <TextBlock Text="• Tạo DOCX / PPTX / XLSX" Foreground="#E5E7EB" Margin="4,5"/>
                     <TextBlock Text="• Mở &amp; đọc outline" Foreground="#E5E7EB" Margin="4,5"/>
                     <TextBlock Text="• Kiểm tra issues" Foreground="#E5E7EB" Margin="4,5"/>

@@ -104,9 +104,9 @@ get "{file}" / --json
 
 See `NOTICE-OFFICECLI.txt`.
 
-## V1.0.2 portable build
+## V1.0.3 portable build
 
-V1.0.2 GitHub Actions now downloads the official latest Windows x64 OfficeCLI release automatically and bundles it at:
+V1.0.3 GitHub Actions now downloads the official latest Windows x64 OfficeCLI release automatically and bundles it at:
 
 `tools/officecli-win-x64.exe`
 
@@ -115,7 +115,7 @@ The downloadable GitHub Artifact contains the application directory directly (no
 Expected portable layout:
 
 ```text
-HoaVanOfficeStudio-Portable-v1.0.2/
+HoaVanOfficeStudio-Portable-v1.0.3/
 ├── HoaVan.OfficeStudio.exe
 ├── tools/
 │   └── officecli-win-x64.exe

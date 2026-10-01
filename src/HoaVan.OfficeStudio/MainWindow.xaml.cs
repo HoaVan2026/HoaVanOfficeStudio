@@ -34,7 +34,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            EngineStatusText.Text = "OfficeCLI Engine: NOT FOUND. Bản Portable hợp lệ phải có tools\officecli-win-x64.exe.";
+            EngineStatusText.Text = "OfficeCLI Engine: NOT FOUND. Bản Portable hợp lệ phải có tools\\officecli-win-x64.exe.";
             EngineStatusText.Foreground = System.Windows.Media.Brushes.LightSalmon;
             AppendResult("Kiểm tra engine", result);
         }
