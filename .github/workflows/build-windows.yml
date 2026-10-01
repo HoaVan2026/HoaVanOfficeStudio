@@ -31,34 +31,82 @@ jobs:
           --self-contained true
           -p:PublishSingleFile=true
           -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:DebugType=None
+          -p:DebugSymbols=false
           -o dist/HoaVanOfficeStudio
 
-      - name: Copy OfficeCLI files
+      - name: Download latest OfficeCLI
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path "dist/HoaVanOfficeStudio/tools"
 
-          if (Test-Path "tools/officecli-win-x64.exe") {
-            Copy-Item "tools/officecli-win-x64.exe" `
-              "dist/HoaVanOfficeStudio/tools/officecli-win-x64.exe"
+          $release = Invoke-RestMethod `
+            -Uri "https://api.github.com/repos/tjscience/OfficeCLI/releases/latest" `
+            -Headers @{ "User-Agent" = "HoaVanOfficeStudio-Build" }
+
+          $asset = $release.assets | Where-Object {
+            $_.name -eq "officecli-win-x64.exe"
+          } | Select-Object -First 1
+
+          if (-not $asset) {
+            Write-Host "Available OfficeCLI assets:"
+            $release.assets | ForEach-Object {
+              Write-Host $_.name
+            }
+            throw "Cannot find officecli-win-x64.exe in latest OfficeCLI release."
           }
 
+          Invoke-WebRequest `
+            -Uri $asset.browser_download_url `
+            -OutFile "dist/HoaVanOfficeStudio/tools/officecli-win-x64.exe"
+
+      - name: Copy OfficeCLI notices
+        shell: pwsh
+        run: |
           if (Test-Path "NOTICE-OFFICECLI.txt") {
             Copy-Item "NOTICE-OFFICECLI.txt" `
               "dist/HoaVanOfficeStudio/NOTICE-OFFICECLI.txt"
           }
 
-      - name: Create portable ZIP
+          if (Test-Path "LICENSE-OFFICECLI.txt") {
+            Copy-Item "LICENSE-OFFICECLI.txt" `
+              "dist/HoaVanOfficeStudio/LICENSE-OFFICECLI.txt"
+          }
+
+          if (Test-Path "THIRD-PARTY-NOTICES-OFFICECLI.txt") {
+            Copy-Item "THIRD-PARTY-NOTICES-OFFICECLI.txt" `
+              "dist/HoaVanOfficeStudio/THIRD-PARTY-NOTICES-OFFICECLI.txt"
+          }
+
+      - name: Verify Portable Package
         shell: pwsh
         run: |
-          Compress-Archive `
-            -Path "dist/HoaVanOfficeStudio/*" `
-            -DestinationPath "dist/HoaVanOfficeStudio-Portable.zip" `
-            -Force
+          $app = "dist/HoaVanOfficeStudio/HoaVan.OfficeStudio.exe"
+          $engine = "dist/HoaVanOfficeStudio/tools/officecli-win-x64.exe"
+
+          if (-not (Test-Path $app)) {
+            throw "HoaVan.OfficeStudio.exe is missing."
+          }
+
+          if (-not (Test-Path $engine)) {
+            throw "OfficeCLI engine is missing."
+          }
+
+          $appSize = (Get-Item $app).Length
+          $engineSize = (Get-Item $engine).Length
+
+          Write-Host "APP READY: $app"
+          Write-Host "App size: $appSize bytes"
+          Write-Host "OFFICECLI READY: $engine"
+          Write-Host "OfficeCLI size: $engineSize bytes"
+
+          Get-ChildItem "dist/HoaVanOfficeStudio" -Recurse |
+            Select-Object FullName, Length
 
       - name: Upload Portable App
         uses: actions/upload-artifact@v4
         with:
-          name: HoaVanOfficeStudio-Portable
-          path: dist/HoaVanOfficeStudio-Portable.zip
+          name: HoaVanOfficeStudio-Portable-v1.0.3
+          path: dist/HoaVanOfficeStudio/
           if-no-files-found: error
+          compression-level: 6
