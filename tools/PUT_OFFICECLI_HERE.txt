@@ -1,0 +1,5 @@
+Place the official Windows x64 OfficeCLI binary here and name it:
+
+officecli-win-x64.exe
+
+The wrapper app also supports the OFFICECLI_PATH environment variable or an officecli.exe available on PATH.

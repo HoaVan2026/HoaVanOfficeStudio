@@ -1,0 +1,133 @@
+<Window x:Class="HoaVan.OfficeStudio.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Hoa Van Office Studio V1" Height="820" Width="1260"
+        MinHeight="680" MinWidth="1020" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="#111827">
+            <Grid Margin="22">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <TextBlock Text="HOA VAN" Foreground="#93C5FD" FontSize="14" FontWeight="Bold"/>
+                    <TextBlock Text="Office Studio" Foreground="White" FontSize="27" FontWeight="Bold" Margin="0,3,0,2"/>
+                    <TextBlock Text="V1 · Windows Portable" Foreground="#94A3B8" FontSize="12"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Margin="0,38,0,0">
+                    <Border Background="#1F2937" CornerRadius="10" Padding="14" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="OfficeCLI Engine" Foreground="White" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="EngineStatusText" Text="Đang kiểm tra..." Foreground="#CBD5E1" TextWrapping="Wrap" FontSize="12" Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+                    <TextBlock Text="V1 hỗ trợ" Foreground="#64748B" FontWeight="SemiBold" Margin="4,12,0,8"/>
+                    <TextBlock Text="• Tạo DOCX / PPTX / XLSX" Foreground="#E5E7EB" Margin="4,5"/>
+                    <TextBlock Text="• Mở &amp; đọc outline" Foreground="#E5E7EB" Margin="4,5"/>
+                    <TextBlock Text="• Kiểm tra issues" Foreground="#E5E7EB" Margin="4,5"/>
+                    <TextBlock Text="• Preview HTML" Foreground="#E5E7EB" Margin="4,5"/>
+                    <TextBlock Text="• Export PDF" Foreground="#E5E7EB" Margin="4,5"/>
+                    <TextBlock Text="• Chạy lệnh OfficeCLI nâng cao" Foreground="#E5E7EB" Margin="4,5"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="2" Text="Designed and Built by Mr Hoa Van" Foreground="#64748B" FontSize="11" TextWrapping="Wrap"/>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+            <Grid Margin="34,26,34,34">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel>
+                    <TextBlock Text="Document Workspace" FontSize="30" FontWeight="Bold"/>
+                    <TextBlock Text="Tạo, kiểm tra, xem trước và xuất tài liệu Office bằng OfficeCLI — không cần mở terminal." Foreground="{StaticResource MutedBrush}" FontSize="14" Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <Border Grid.Row="1" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="14" Padding="22" Margin="0,22,0,16">
+                    <StackPanel>
+                        <TextBlock Text="1. Tạo tài liệu mới" FontSize="18" FontWeight="Bold"/>
+                        <Grid Margin="0,14,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ComboBox x:Name="DocumentTypeCombo" SelectedIndex="0" Margin="0,0,10,0">
+                                <ComboBoxItem Content="Word (.docx)" Tag="Word"/>
+                                <ComboBoxItem Content="PowerPoint (.pptx)" Tag="PowerPoint"/>
+                                <ComboBoxItem Content="Excel (.xlsx)" Tag="Excel"/>
+                            </ComboBox>
+                            <TextBox Grid.Column="1" x:Name="NewDocumentNameText" Text="Tai_lieu_moi" Margin="0,0,10,0"/>
+                            <Button Grid.Column="2" Content="Tạo file" Click="CreateDocument_Click"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="2" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="14" Padding="22" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="2. Tài liệu đang làm việc" FontSize="18" FontWeight="Bold"/>
+                        <Grid Margin="0,14,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="CurrentFileText" IsReadOnly="True" Text="Chưa chọn file" Margin="0,0,10,0"/>
+                            <Button Grid.Column="1" Content="Chọn file..." Style="{StaticResource SecondaryButton}" Click="SelectFile_Click"/>
+                        </Grid>
+                        <WrapPanel Margin="0,8,0,0">
+                            <Button Content="Đọc outline" Click="Outline_Click"/>
+                            <Button Content="Kiểm tra issues" Style="{StaticResource SecondaryButton}" Click="Issues_Click"/>
+                            <Button Content="Preview HTML" Style="{StaticResource SecondaryButton}" Click="Preview_Click"/>
+                            <Button Content="Xuất PDF" Style="{StaticResource SecondaryButton}" Click="ExportPdf_Click"/>
+                            <Button Content="Lưu bản sao" Style="{StaticResource SecondaryButton}" Click="SaveCopy_Click"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="3" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="14" Padding="22" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="3. Advanced OfficeCLI" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock Text="Dành cho lệnh add / set / remove / get / query... Không nhập tên officecli ở đầu." Foreground="{StaticResource MutedBrush}" Margin="0,5,0,10"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="AdvancedCommandText" Text="view &quot;{file}&quot; stats" Margin="0,0,10,0"/>
+                            <Button Grid.Column="1" Content="Chạy lệnh" Click="AdvancedCommand_Click"/>
+                        </Grid>
+                        <TextBlock Text="Mẹo: dùng {file} để chèn đường dẫn file đang chọn." Foreground="{StaticResource MutedBrush}" FontSize="12" Margin="0,7,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="4" Background="#0F172A" CornerRadius="14" Padding="20" MinHeight="210">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <DockPanel>
+                            <TextBlock Text="Activity Log" Foreground="White" FontSize="16" FontWeight="Bold" DockPanel.Dock="Left"/>
+                            <Button Content="Xóa log" HorizontalAlignment="Right" Style="{StaticResource SecondaryButton}" Padding="10,5" Click="ClearLog_Click"/>
+                        </DockPanel>
+                        <TextBox Grid.Row="1" x:Name="LogText" Margin="0,12,0,0" Background="#020617" Foreground="#D1FAE5" BorderThickness="0" FontFamily="Consolas" FontSize="12" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AcceptsReturn="True"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>

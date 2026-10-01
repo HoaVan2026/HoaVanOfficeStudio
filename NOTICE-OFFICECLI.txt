@@ -1,0 +1,7 @@
+Hoa Van Office Studio V1 is a separate GUI wrapper intended to invoke OfficeCLI as an external process.
+
+OfficeCLI is an independent open-source project by its respective authors and is licensed under the Apache License 2.0.
+Source project: https://github.com/iOfficeAI/OfficeCLI
+Website: https://officecli.ai
+
+No OfficeCLI source code is copied into this wrapper project. When distributing the official OfficeCLI binary with this application, preserve the upstream LICENSE / NOTICE requirements and comply with the Apache-2.0 license.
