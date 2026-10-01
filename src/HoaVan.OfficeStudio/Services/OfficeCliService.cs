@@ -15,8 +15,6 @@ public sealed class OfficeCliService
 
     public string EnginePath => _enginePath;
 
-    public bool IsEngineAvailable => File.Exists(_enginePath) || _enginePath.Equals("officecli", StringComparison.OrdinalIgnoreCase) || _enginePath.Equals("officecli.exe", StringComparison.OrdinalIgnoreCase);
-
     public async Task<OfficeCliResult> RunAsync(IEnumerable<string> arguments, CancellationToken cancellationToken = default)
     {
         var psi = new ProcessStartInfo
@@ -29,8 +27,7 @@ public sealed class OfficeCliService
             WorkingDirectory = Environment.CurrentDirectory
         };
 
-        foreach (var arg in arguments)
-            psi.ArgumentList.Add(arg);
+        foreach (var arg in arguments) psi.ArgumentList.Add(arg);
 
         using var process = new Process { StartInfo = psi, EnableRaisingEvents = true };
         var stdout = new StringBuilder();
@@ -40,8 +37,7 @@ public sealed class OfficeCliService
 
         try
         {
-            if (!process.Start())
-                return new OfficeCliResult(-1, string.Empty, "Không thể khởi chạy OfficeCLI.");
+            if (!process.Start()) return new OfficeCliResult(-1, string.Empty, "Không thể khởi chạy OfficeCLI.");
         }
         catch (Exception ex)
         {
@@ -70,23 +66,29 @@ public sealed class OfficeCliService
         return RunAsync(args, ct);
     }
 
-    public Task<OfficeCliResult> OutlineAsync(string filePath, CancellationToken ct = default) =>
-        RunAsync(new[] { "view", filePath, "outline" }, ct);
+    public Task<OfficeCliResult> AddWordParagraphAsync(string filePath, string text, string? style = null, CancellationToken ct = default)
+    {
+        var args = new List<string> { "add", filePath, "/body", "--type", "paragraph", "--prop", $"text={text}" };
+        if (!string.IsNullOrWhiteSpace(style)) { args.Add("--prop"); args.Add($"style={style}"); }
+        return RunAsync(args, ct);
+    }
 
-    public Task<OfficeCliResult> IssuesAsync(string filePath, CancellationToken ct = default) =>
-        RunAsync(new[] { "view", filePath, "issues" }, ct);
+    public Task<OfficeCliResult> AddSlideAsync(string filePath, string title, CancellationToken ct = default) =>
+        RunAsync(new[] { "add", filePath, "/", "--type", "slide", "--prop", $"title={title}" }, ct);
 
-    public Task<OfficeCliResult> PreviewHtmlAsync(string filePath, CancellationToken ct = default) =>
-        RunAsync(new[] { "view", filePath, "html", "--browser" }, ct);
+    public Task<OfficeCliResult> AddSlideTextAsync(string filePath, int slideIndex, string text, string y, CancellationToken ct = default) =>
+        RunAsync(new[] { "add", filePath, $"/slide[{slideIndex}]", "--type", "shape", "--prop", $"text={text}", "--prop", "x=1.6cm", "--prop", $"y={y}", "--prop", "w=22cm", "--prop", "h=2cm", "--prop", "size=20", "--prop", "color=1F2937" }, ct);
 
-    public Task<OfficeCliResult> ExportPdfAsync(string filePath, string outputPath, CancellationToken ct = default) =>
-        RunAsync(new[] { "view", filePath, "pdf", "--out", outputPath }, ct);
+    public Task<OfficeCliResult> AddExcelCellAsync(string filePath, string cellRef, string value, CancellationToken ct = default) =>
+        RunAsync(new[] { "add", filePath, "/Sheet1", "--type", "cell", "--prop", $"ref={cellRef}", "--prop", $"value={value}" }, ct);
 
-    public Task<OfficeCliResult> CloseAsync(string filePath, CancellationToken ct = default) =>
-        RunAsync(new[] { "close", filePath }, ct);
-
-    public Task<OfficeCliResult> VersionAsync(CancellationToken ct = default) =>
-        RunAsync(new[] { "--version" }, ct);
+    public Task<OfficeCliResult> SaveAsync(string filePath, CancellationToken ct = default) => RunAsync(new[] { "save", filePath }, ct);
+    public Task<OfficeCliResult> CloseAsync(string filePath, CancellationToken ct = default) => RunAsync(new[] { "close", filePath }, ct);
+    public Task<OfficeCliResult> OutlineAsync(string filePath, CancellationToken ct = default) => RunAsync(new[] { "view", filePath, "outline" }, ct);
+    public Task<OfficeCliResult> IssuesAsync(string filePath, CancellationToken ct = default) => RunAsync(new[] { "view", filePath, "issues" }, ct);
+    public Task<OfficeCliResult> PreviewHtmlAsync(string filePath, CancellationToken ct = default) => RunAsync(new[] { "view", filePath, "html", "--browser" }, ct);
+    public Task<OfficeCliResult> ExportPdfAsync(string filePath, string outputPath, CancellationToken ct = default) => RunAsync(new[] { "view", filePath, "pdf", "--out", outputPath }, ct);
+    public Task<OfficeCliResult> VersionAsync(CancellationToken ct = default) => RunAsync(new[] { "--version" }, ct);
 
     private static string ResolveEnginePath(string? explicitPath)
     {
@@ -97,10 +99,8 @@ public sealed class OfficeCliService
         var baseDir = AppContext.BaseDirectory;
         var bundled = Path.Combine(baseDir, "tools", "officecli-win-x64.exe");
         if (File.Exists(bundled)) return bundled;
-
         var adjacent = Path.Combine(baseDir, "officecli-win-x64.exe");
         if (File.Exists(adjacent)) return adjacent;
-
         return "officecli.exe";
     }
 }

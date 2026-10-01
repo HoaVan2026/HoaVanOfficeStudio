@@ -1,0 +1,20 @@
+HOA VAN OFFICE STUDIO V1.1 - CACH CAP NHAT GITHUB
+
+1. Giai nen file HoaVanOfficeStudioV1.1_Source.zip.
+2. Vao repo GitHub HoaVanOfficeStudio -> Add file -> Upload files.
+3. Keo TOAN BO noi dung trong thu muc vua giai nen vao GitHub.
+4. Commit message: Upgrade to V1.1 Teacher Edition
+5. Chon Commit directly to main -> Commit changes.
+6. QUAN TRONG: vao .github/workflows/build-windows.yml va kiem tra file workflow da duoc cap nhat.
+   Neu GitHub web upload khong thay doi file an .github, hay mo file workflow -> Edit -> Ctrl+A -> paste noi dung workflow V1.1 trong goi nay.
+7. Vao Actions. Ban build dung phai co cac buoc:
+   - Publish Windows Portable
+   - Download latest OfficeCLI
+   - Copy OfficeCLI notices
+   - Verify Portable Package
+   - Upload Portable App
+8. Khi xanh, tai Artifact: HoaVanOfficeStudio-Portable-v1.1.0
+9. Giai nen mot lan -> mo HoaVan.OfficeStudio.exe.
+
+V1.1 KHONG CAN API KEY.
+AI Create = dan noi dung da tao boi Gemini/ChatGPT vao app de chuyen thanh DOCX/PPTX/XLSX.

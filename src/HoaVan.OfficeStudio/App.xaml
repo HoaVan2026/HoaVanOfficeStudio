@@ -3,13 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <SolidColorBrush x:Key="BgBrush" Color="#F5F7FB" />
+        <SolidColorBrush x:Key="BgBrush" Color="#F4F7FB" />
         <SolidColorBrush x:Key="PanelBrush" Color="#FFFFFF" />
-        <SolidColorBrush x:Key="InkBrush" Color="#172033" />
+        <SolidColorBrush x:Key="InkBrush" Color="#14213D" />
         <SolidColorBrush x:Key="MutedBrush" Color="#64748B" />
         <SolidColorBrush x:Key="AccentBrush" Color="#2563EB" />
-        <SolidColorBrush x:Key="AccentSoftBrush" Color="#E8F0FF" />
-        <SolidColorBrush x:Key="BorderBrush" Color="#DDE3EC" />
+        <SolidColorBrush x:Key="Accent2Brush" Color="#0EA5E9" />
+        <SolidColorBrush x:Key="AccentSoftBrush" Color="#EAF2FF" />
+        <SolidColorBrush x:Key="GreenSoftBrush" Color="#E8FFF2" />
+        <SolidColorBrush x:Key="BorderBrush" Color="#DDE5F0" />
 
         <Style TargetType="Window">
             <Setter Property="FontFamily" Value="Segoe UI"/>
@@ -17,8 +19,8 @@
             <Setter Property="Foreground" Value="{StaticResource InkBrush}"/>
         </Style>
         <Style TargetType="Button">
-            <Setter Property="Padding" Value="14,9"/>
-            <Setter Property="Margin" Value="0,0,8,8"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Margin" Value="0,0,9,9"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -29,14 +31,25 @@
             <Setter Property="Background" Value="{StaticResource AccentSoftBrush}"/>
             <Setter Property="Foreground" Value="{StaticResource AccentBrush}"/>
         </Style>
+        <Style x:Key="GhostButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="{StaticResource InkBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        </Style>
         <Style TargetType="TextBox">
-            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="Padding" Value="11,9"/>
             <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Background" Value="White"/>
         </Style>
         <Style TargetType="ComboBox">
-            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Padding" Value="9,7"/>
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,10"/>
         </Style>
     </Application.Resources>
 </Application>

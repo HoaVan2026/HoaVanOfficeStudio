@@ -1,125 +1,20 @@
-# Hoa Van Office Studio V1
+# Hoa Van Office Studio V1.1 — Teacher Edition
 
-Windows desktop GUI wrapper for OfficeCLI.
+Windows portable GUI powered by OfficeCLI.
 
-## V1 scope
+## V1.1 highlights
+- AI Create: paste content from Gemini/ChatGPT and generate real DOCX/PPTX/XLSX files.
+- Word Studio, PowerPoint Studio, Excel Studio tabs.
+- Smart templates for lesson plans, teaching slides, and tabular data.
+- No API key required.
+- OfficeCLI is bundled automatically by GitHub Actions.
+- Preview HTML, outline, issue checking, PDF export, and advanced OfficeCLI tools.
 
-- Create blank `.docx`, `.pptx`, `.xlsx` files using OfficeCLI.
-- Select an existing Office file.
-- Read document outline.
-- Inspect OfficeCLI `issues` output.
-- Open OfficeCLI HTML preview in the default browser.
-- Export the current document to PDF through OfficeCLI's exporter path.
-- Save a file copy.
-- Run advanced OfficeCLI commands without opening a terminal.
+## AI Create input conventions
+- Word: `# Heading 1`, `## Heading 2`, `### Heading 3`; normal lines become paragraphs.
+- PowerPoint: each `# Slide title` starts a new slide; following lines become slide content.
+- Excel: paste TSV (preferred) or CSV-like rows.
 
-> V1 deliberately does **not** pretend OfficeCLI itself is an LLM. Natural-language AI orchestration belongs in V2, where a model provider can translate user intent into a validated OfficeCLI command plan.
-
-## Architecture
-
-```text
-HoaVan.OfficeStudio.exe (WPF)
-        |
-        | ProcessStartInfo.ArgumentList
-        v
-officecli-win-x64.exe
-        |
-        +--> DOCX / PPTX / XLSX
-        +--> HTML preview
-        +--> PDF exporter
-```
-
-The OfficeCLI engine is replaceable. The GUI does not modify OfficeCLI core code.
-
-## Requirements for development
-
-- Windows 10/11 x64
-- .NET 10 SDK
-- Visual Studio 2026+ with Desktop development with .NET, or `dotnet` CLI
-- Official `officecli-win-x64.exe`
-
-## Add OfficeCLI
-
-Copy the official Windows x64 binary to:
-
-```text
-tools/officecli-win-x64.exe
-```
-
-At runtime the app resolves the engine in this order:
-
-1. `OFFICECLI_PATH` environment variable
-2. `tools/officecli-win-x64.exe` next to the published app
-3. `officecli-win-x64.exe` next to the published app
-4. `officecli.exe` from PATH
-
-## Build portable package
-
-Open PowerShell in the project folder:
-
-```powershell
-Set-ExecutionPolicy -Scope Process Bypass
-.\scripts\publish-portable.ps1
-```
-
-The portable folder is created under `dist/`.
-
-## Development run
-
-```powershell
-dotnet run --project .\src\HoaVan.OfficeStudio\HoaVan.OfficeStudio.csproj
-```
-
-## Advanced command box
-
-The Advanced OfficeCLI field accepts arguments only — omit the initial `officecli` executable name.
-Use `{file}` as a placeholder for the currently selected file.
-
-Examples:
-
-```text
-view "{file}" stats
-view "{file}" screenshot --grid auto --out preview.png
-get "{file}" / --json
-```
-
-## Safe design decisions
-
-- Arguments are passed with `ProcessStartInfo.ArgumentList`, not by shell concatenation.
-- The GUI never invokes `cmd.exe` or PowerShell to execute OfficeCLI commands.
-- Existing files are not overwritten by `create` unless OfficeCLI is explicitly called with `--force` through Advanced mode.
-- The app keeps OfficeCLI as an external engine so it can be replaced independently.
-
-## Next V2
-
-- Provider-agnostic AI prompt orchestration (OpenAI / Gemini / local model).
-- Command-plan validation before execution.
-- Template gallery for lesson plans, slides, worksheets and school reports.
-- Native preview pane inside the app.
-- Batch processing.
-- Recent files / project workspace.
-- Vietnamese teaching package presets.
-
-## Attribution
-
-See `NOTICE-OFFICECLI.txt`.
-
-## V1.0.3 portable build
-
-V1.0.3 GitHub Actions now downloads the official latest Windows x64 OfficeCLI release automatically and bundles it at:
-
-`tools/officecli-win-x64.exe`
-
-The downloadable GitHub Artifact contains the application directory directly (no manually-created ZIP inside the Artifact), strips `.pdb` debug files, and verifies both the GUI executable and OfficeCLI engine before upload.
-
-Expected portable layout:
-
-```text
-HoaVanOfficeStudio-Portable-v1.0.3/
-├── HoaVan.OfficeStudio.exe
-├── tools/
-│   └── officecli-win-x64.exe
-├── NOTICE-OFFICECLI.txt
-├── LICENSE-OFFICECLI.txt
-└── THIRD-PARTY-NOTICES-OFFICECLI.txt
-```
+## Build
+GitHub Actions workflow: `.github/workflows/build-windows.yml`.
+Artifact: `HoaVanOfficeStudio-Portable-v1.1.0`.
