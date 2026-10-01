@@ -1,0 +1,64 @@
+name: Build Hoa Van Office Studio
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore src/HoaVan.OfficeStudio/HoaVan.OfficeStudio.csproj
+
+      - name: Publish Windows Portable
+        run: >
+          dotnet publish
+          src/HoaVan.OfficeStudio/HoaVan.OfficeStudio.csproj
+          -c Release
+          -r win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -o dist/HoaVanOfficeStudio
+
+      - name: Copy OfficeCLI files
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "dist/HoaVanOfficeStudio/tools"
+
+          if (Test-Path "tools/officecli-win-x64.exe") {
+            Copy-Item "tools/officecli-win-x64.exe" `
+              "dist/HoaVanOfficeStudio/tools/officecli-win-x64.exe"
+          }
+
+          if (Test-Path "NOTICE-OFFICECLI.txt") {
+            Copy-Item "NOTICE-OFFICECLI.txt" `
+              "dist/HoaVanOfficeStudio/NOTICE-OFFICECLI.txt"
+          }
+
+      - name: Create portable ZIP
+        shell: pwsh
+        run: |
+          Compress-Archive `
+            -Path "dist/HoaVanOfficeStudio/*" `
+            -DestinationPath "dist/HoaVanOfficeStudio-Portable.zip" `
+            -Force
+
+      - name: Upload Portable App
+        uses: actions/upload-artifact@v4
+        with:
+          name: HoaVanOfficeStudio-Portable
+          path: dist/HoaVanOfficeStudio-Portable.zip
+          if-no-files-found: error
